@@ -1,23 +1,35 @@
-name: My First GitHub Action
+name: Deploy Website
 
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
 
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - name: Get source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Show files
-        run: ls -la
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
-      - name: Test HTML exists
-        run: test -f index.html
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
 
-      - name: Success message
-        run: echo "Code pushed successfully!"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
