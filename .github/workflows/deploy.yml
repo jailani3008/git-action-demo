@@ -1,0 +1,23 @@
+name: My First GitHub Action
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v4
+
+      - name: Show files
+        run: ls -la
+
+      - name: Test HTML exists
+        run: test -f index.html
+
+      - name: Success message
+        run: echo "Code pushed successfully!"
